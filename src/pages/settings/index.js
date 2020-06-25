@@ -5,10 +5,11 @@ import {
   TouchableOpacity,
   StatusBar,
   Image,
-  Slider,
   ScrollView,
   SafeAreaView,
 } from 'react-native';
+import Slider from '@react-native-community/slider';
+
 import styles from './styles';
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons';
 

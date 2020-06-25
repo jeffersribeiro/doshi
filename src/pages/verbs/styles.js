@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   loading: {
+    height: Dimensions.get('screen').height,
     flex: 1,
     display: 'flex',
     flexDirection: 'column',

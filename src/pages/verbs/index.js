@@ -89,11 +89,13 @@ export default class App extends React.Component {
           }>
           <StatusBar backgroundColor="white" barStyle="dark-content" />
           {this.state.loading ? (
-            <ActivityIndicator
-              style={styles.loading}
-              color="skyblue"
-              size={40}
-            />
+            <View style={styles.loading}>
+              <ActivityIndicator
+                style={styles.loading}
+                color="skyblue"
+                size={40}
+              />
+            </View>
           ) : (
             <View>
               <FlatList

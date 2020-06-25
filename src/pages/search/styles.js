@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     display: 'flex',
     flexDirection: 'row',
-    marginTop: '1%',
+    marginTop: '3%',
     marginLeft: '7%',
   },
   Input: {

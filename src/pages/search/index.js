@@ -25,7 +25,7 @@ export default class Search extends React.Component {
   constructor() {
     super();
     this.state = {
-      word: 'eat',
+      word: '',
       DATA: [],
       loading: false,
     };
@@ -48,9 +48,6 @@ export default class Search extends React.Component {
   onWordChange = word => {
     this.setState({word});
   };
-  componentDidMount() {
-    this.onSearchClick();
-  }
 
   render() {
     const {DATA} = this.state;
@@ -60,7 +57,7 @@ export default class Search extends React.Component {
           <View style={styles.searchContainer}>
             <TextInput
               value={this.state.word}
-              onChangeText={this.onWordChange}
+              onChangeText={word => this.onWordChange(word)}
               placeholder="Pesquisar"
               style={styles.Input}
             />

@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Text,
+  RefreshControl,
   ActivityIndicator,
 } from 'react-native';
 import PropTypes from 'prop-types';
@@ -26,23 +27,24 @@ export default class NewDoshi extends React.Component {
   };
 
   state = {
-    verb_type: 'verbo-ru',
-    verb: '見る',
-    furigana: 'みる',
-    romaji: 'MIRU',
-    negative: '見ません',
-    negative_translate: 'não ver',
-    past: '見ました	',
-    past_translate: 'vi',
-    connective: '見て',
-    connective_translate: 'ver e ...',
-    potential: '見られる',
-    potential_translate: 'pode ver',
-    negative_past: '見ませんでした',
-    negative_past_translate: 'não vi',
-    notes: '私はテレビで見て食べています。',
-    notes_translate: 'Estou assistindo e comendo na TV.',
+    verb_type: '',
+    verb: '',
+    furigana: '',
+    romaji: '',
+    negative: '',
+    negative_translate: '',
+    past: '',
+    past_translate: '',
+    connective: '',
+    connective_translate: '',
+    potential: '',
+    potential_translate: '',
+    negative_past: '',
+    negative_past_translate: '',
+    notes: '',
+    notes_translate: '',
     error: '',
+    colorErrorIndicator: 'darkgray',
     loading: false,
   };
 
@@ -122,17 +124,18 @@ export default class NewDoshi extends React.Component {
       !negative ||
       !negative_translate ||
       !past ||
-      !past_translate ||
-      !connective ||
-      !connective_translate ||
-      !potential ||
-      !potential_translate ||
-      !negative_past ||
-      !negative_past_translate ||
-      !notes ||
-      !notes_translate
+      !past_translate
     ) {
-      this.setState({error: 'Preencha todos os campos para continuar!'});
+      this.setState({
+        error: 'Preencha os campos para continuar!',
+        colorErrorIndicator: 'red',
+      });
+      setTimeout(() => {
+        this.setState({
+          error: '',
+          colorErrorIndicator: 'darkgray',
+        });
+      }, 4000);
     } else {
       this.setState({
         loading: true,
@@ -189,84 +192,123 @@ export default class NewDoshi extends React.Component {
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor="white" barStyle="dark-content" />
-        <TouchableOpacity
-          onPress={this.handleSignUpPress}
-          style={styles.Button}>
-          {this.state.loading ? (
-            <ActivityIndicator size="large" color="white" />
-          ) : (
-            <Text style={styles.ButtonText}>Salvar</Text>
+        <View style={styles.containerButton}>
+          <TouchableOpacity
+            onPress={this.handleSignUpPress}
+            style={styles.Button}>
+            {this.state.loading ? (
+              <ActivityIndicator size="large" color="white" />
+            ) : (
+              <Text style={styles.ButtonText}>Salvar</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+        <View style={styles.errorMsgContainer}>
+          {this.state.error.length !== 0 && (
+            <Text style={styles.ErrorMessage}>{this.state.error}</Text>
           )}
-        </TouchableOpacity>
+        </View>
         <ScrollView>
           <TextInput
+            placeholderTextColor={this.state.colorErrorIndicator}
             placeholder="Tipo de verbo"
             value={this.state.verb_type}
             onChangeText={this.handleVerbTypeChange}
             autoCapitalize="none"
             autoCorrect={false}
-            style={styles.InputType}
+            style={[
+              styles.InputType,
+              {borderBottomColor: this.state.colorErrorIndicator},
+            ]}
           />
           <View style={styles.containerInputs}>
             <TextInput
               placeholder="Verbo"
+              placeholderTextColor={this.state.colorErrorIndicator}
               value={this.state.verb}
               onChangeText={this.handleVerbChange}
               autoCapitalize="none"
               autoCorrect={false}
-              style={styles.InputMini}
+              style={[
+                styles.InputMini,
+                {borderBottomColor: this.state.colorErrorIndicator},
+              ]}
             />
             <TextInput
               placeholder="furigana"
+              placeholderTextColor={this.state.colorErrorIndicator}
               value={this.state.furigana}
               onChangeText={this.handleFuriganaChange}
               autoCapitalize="none"
               autoCorrect={false}
-              style={styles.InputMini}
+              style={[
+                styles.InputMini,
+                {borderBottomColor: this.state.colorErrorIndicator},
+              ]}
             />
             <TextInput
-              placeholder="Romaji"
+              placeholder={'Romaji\nopcional'}
+              placeholderTextColor={this.state.colorErrorIndicator}
               value={this.state.romaji}
               onChangeText={this.handleRomajiChange}
               autoCapitalize="none"
               autoCorrect={false}
-              style={styles.InputMini}
+              style={[
+                styles.InputMini,
+                {borderBottomColor: this.state.colorErrorIndicator},
+              ]}
             />
           </View>
           <View style={styles.containerInputs}>
             <TextInput
               placeholder="Negativa"
+              placeholderTextColor={this.state.colorErrorIndicator}
               value={this.state.negative}
               onChangeText={this.handleNegativeChange}
               autoCapitalize="none"
               autoCorrect={false}
-              style={styles.Input}
+              style={[
+                styles.Input,
+                {borderBottomColor: this.state.colorErrorIndicator},
+              ]}
             />
             <TextInput
               placeholder="Tradução"
+              placeholderTextColor={this.state.colorErrorIndicator}
               value={this.state.negative_translate}
               onChangeText={this.handleNegativeChangeTranslate}
               autoCapitalize="none"
               autoCorrect={false}
-              style={styles.Input}
+              style={[
+                styles.Input,
+                {borderBottomColor: this.state.colorErrorIndicator},
+              ]}
             />
           </View>
           <View style={styles.containerInputs}>
             <TextInput
               placeholder="Passada"
+              placeholderTextColor={this.state.colorErrorIndicator}
               value={this.state.past}
               onChangeText={this.handlePastChange}
               autoCapitalize="none"
               autoCorrect={false}
-              style={styles.Input}
+              style={[
+                styles.Input,
+                {borderBottomColor: this.state.colorErrorIndicator},
+              ]}
             />
             <TextInput
               placeholder="Tradução"
+              placeholderTextColor={this.state.colorErrorIndicator}
               value={this.state.past_translate}
               onChangeText={this.handlePastChangeTranslate}
               autoCapitalize="none"
               autoCorrect={false}
-              style={styles.Input}
+              style={[
+                styles.Input,
+                {borderBottomColor: this.state.colorErrorIndicator},
+              ]}
             />
           </View>
           <View style={styles.containerInputs}>
@@ -341,9 +383,6 @@ export default class NewDoshi extends React.Component {
               style={styles.Input}
             />
           </View>
-          {this.state.error.length !== 0 && (
-            <Text style={styles.ErrorMessage}>{this.state.error}</Text>
-          )}
         </ScrollView>
       </View>
     );

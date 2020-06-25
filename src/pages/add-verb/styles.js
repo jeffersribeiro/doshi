@@ -17,12 +17,17 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     marginBottom: 15,
     marginHorizontal: 20,
-    marginVertical: 20,
     fontSize: 16,
     width: '90%',
     borderBottomWidth: 1,
     borderBottomColor: 'gray',
   },
+  errorMsgContainer: {
+    width: '100%',
+    height: '5%',
+    marginTop: '2%',
+  },
+
   Input: {
     paddingHorizontal: 20,
     paddingVertical: 15,
@@ -48,10 +53,16 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 20,
     fontSize: 16,
+    overlayColor: 'red',
+  },
+  containerButton: {
+    marginTop: '2%',
+    width: '80%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
   Button: {
-    position: 'relative',
-    left: '65%',
     padding: 8,
     width: '30%',
     borderRadius: 5,

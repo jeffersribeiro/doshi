@@ -4,6 +4,8 @@ import {
   FlatList,
   ActivityIndicator,
   View,
+  RefreshControl,
+  ScrollView,
   StatusBar,
 } from 'react-native';
 import styles from './styles';
@@ -15,56 +17,112 @@ export default class App extends React.Component {
     super();
     this.state = {
       DATA: [],
-      loading: false,
+      loading: true,
+      refreshing: false,
     };
   }
 
   readTask = () => {
-    const {DATA} = this.state;
     let uid = auth.currentUser.uid;
     var task = database.ref(`items/${uid}/myverbs`);
+    let taks = [];
     task.on('child_added', data => {
-      DATA.push(data.val());
+      taks.push({
+        id: data.val().id,
+        verb_type: data.val().verb_type,
+        verb: data.val().verb,
+        furigana: data.val().furigana,
+        romaji: data.val().romaji,
+        negative: data.val().negative,
+        negative_translate: data.val().negative_translate,
+        past: data.val().past,
+        past_translate: data.val().past_translate,
+        potential: data.val().potential,
+        potential_translate: data.val().potential_translate,
+        negative_past: data.val().negative_past,
+        negative_past_translate: data.val().negative_past_translate,
+        connective: data.val().connective,
+        connective_translate: data.val().connective_translate,
+        notes: data.val().notes,
+        notes_translate: data.val().notes_translate,
+      });
+      this.setState({
+        DATA: taks,
+        loading: false,
+      });
     });
   };
+
+  wait(timeout) {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
+  }
+
+  onRefresh = () => {
+    this.readTask();
+    this.setState({
+      refreshing: true,
+    });
+    this.wait(2000).then(() => {
+      this.setState({
+        refreshing: false,
+      });
+    });
+  };
+
+  componentDidMount() {
+    this.readTask();
+  }
 
   render() {
     const {DATA} = this.state;
 
     return (
       <SafeAreaView style={styles.container}>
-        <StatusBar backgroundColor="white" barStyle="dark-content" />
-        {this.state.loading ? (
-          <ActivityIndicator style={styles.loading} color="skyblue" size={40} />
-        ) : (
-          <View>
-            <FlatList
-              data={DATA}
-              renderItem={({item}) => (
-                <Item
-                  id={item.id}
-                  verb_type={item.verb_type}
-                  verb={item.verb}
-                  furigana={item.furigana}
-                  romaji={item.romaji}
-                  negative={item.negative}
-                  negative_translate={item.negative_translate}
-                  past={item.past}
-                  past_translate={item.past_translate}
-                  potential={item.potential}
-                  potential_translate={item.potential_translate}
-                  negative_past={item.negative_past}
-                  negative_past_translate={item.negative_past_translate}
-                  connective={item.connective}
-                  connective_translate={item.connective_translate}
-                  notes={item.notes}
-                  notes_translate={item.notes_translate}
-                />
-              )}
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.onRefresh}
             />
-            {this.readTask()}
-          </View>
-        )}
+          }>
+          <StatusBar backgroundColor="white" barStyle="dark-content" />
+          {this.state.loading ? (
+            <ActivityIndicator
+              style={styles.loading}
+              color="skyblue"
+              size={40}
+            />
+          ) : (
+            <View>
+              <FlatList
+                data={DATA}
+                renderItem={({item}) => (
+                  <Item
+                    id={item.id}
+                    verb_type={item.verb_type}
+                    verb={item.verb}
+                    furigana={item.furigana}
+                    romaji={item.romaji}
+                    negative={item.negative}
+                    negative_translate={item.negative_translate}
+                    past={item.past}
+                    past_translate={item.past_translate}
+                    potential={item.potential}
+                    potential_translate={item.potential_translate}
+                    negative_past={item.negative_past}
+                    negative_past_translate={item.negative_past_translate}
+                    connective={item.connective}
+                    connective_translate={item.connective_translate}
+                    notes={item.notes}
+                    notes_translate={item.notes_translate}
+                  />
+                )}
+              />
+            </View>
+          )}
+        </ScrollView>
       </SafeAreaView>
     );
   }
